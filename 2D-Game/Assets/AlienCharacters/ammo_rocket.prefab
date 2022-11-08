@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2922637566530367176}
   - component: {fileID: 1929930365743083091}
   - component: {fileID: 1000350469965706190}
+  - component: {fileID: 2709600963013939062}
   m_Layer: 0
   m_Name: ammo_rocket
   m_TagString: Untagged
@@ -68,6 +69,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!58 &2709600963013939062
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2577356192924922994}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &4107541985409702352
 GameObject:
   m_ObjectHideFlags: 0

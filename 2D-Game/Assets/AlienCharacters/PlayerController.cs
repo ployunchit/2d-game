@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float jumpHeight = 5; 
     public float moveSpeed = 1;
     public float missileForce = 5f;
+    private Health health;
 
     private Vector3 diff;
     private Camera mainCam;
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         mainCam = Camera.main;
+        health = GetComponent<Health>();
     }
 
     // Update is called once per frame
@@ -44,6 +46,10 @@ public class PlayerController : MonoBehaviour
             Rigidbody2D ammo = Instantiate(_ammoPrefab, _ammoSpawn.position, _currentGun.rotation);
             ammo.AddForce(_currentGun.right * missileForce, ForceMode2D.Impulse);
             ammo.transform.Rotate(0, 90, 0);
+        
+            // if (isTurn){
+            //     PlayerManager.instance.NextPlayer();
+            // }
         }
 
         RotateGun();
@@ -55,4 +61,16 @@ public class PlayerController : MonoBehaviour
         float rot_Z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
         _currentGun.rotation = Quaternion.Euler(0, 0, rot_Z + 180f);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision){
+        if (collision.CompareTag("Bullet")){
+            health.ChangeHealth(-10);
+
+            // if (isTurn){
+            //     PlayerManager.instance.NextPlayer();
+            // }
+        }
+    }
 }
+
+//code from Youtube and Robbie: https://www.youtube.com/watch?v=PpGJLOolp3Q&ab_channel=AwesomeTuts-AnyoneCanLearnToMakeGames
