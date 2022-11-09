@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2709600963013939062}
   m_Layer: 0
   m_Name: ammo_rocket
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,7 +84,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.03
 --- !u!1 &4107541985409702352
 GameObject:
   m_ObjectHideFlags: 0

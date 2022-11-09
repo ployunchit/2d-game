@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform _ammoSpawn;
     [SerializeField] Transform _currentGun;
 
+    public int playerID;
     public float jumpHeight = 5; 
     public float moveSpeed = 1;
     public float missileForce = 5f;
@@ -15,6 +16,12 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 diff;
     private Camera mainCam;
+
+    public bool IsTurn {
+        get {
+            return PlayerManager.instance.IsMyTurn(playerID);  
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +33,21 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsTurn){
+            return;
+        }
+        RotateGun();
+        MovementAndShooting();
+    }
+
+    void RotateGun(){
+        diff = mainCam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        diff.Normalize();
+        float rot_Z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+        _currentGun.rotation = Quaternion.Euler(0, 0, rot_Z + 180f);
+    }
+
+    void MovementAndShooting(){
         if(Input.GetKeyDown(KeyCode.Space)){
          GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x,jumpHeight);
          
@@ -44,26 +66,20 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Fire1"))
         {
             Rigidbody2D ammo = Instantiate(_ammoPrefab, _ammoSpawn.position, _currentGun.rotation);
+            // ammo.gameObject.GetComponent<Ammo>().owner = name;
             ammo.AddForce(_currentGun.right * missileForce, ForceMode2D.Impulse);
             ammo.transform.Rotate(0, 90, 0);
         
-            // if (isTurn){
-            //     PlayerManager.instance.NextPlayer();
-            // }
+            if (IsTurn){
+                PlayerManager.instance.NextPlayer();
+            }
         }
-
-        RotateGun();
     }
 
-    void RotateGun(){
-        diff = mainCam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        diff.Normalize();
-        float rot_Z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-        _currentGun.rotation = Quaternion.Euler(0, 0, rot_Z + 180f);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision){
-        if (collision.CompareTag("Bullet")){
+    private void OnCollisionEnter2D(Collision2D collision){
+        if (collision.gameObject.CompareTag("Bullet")){
+            //&& collision.gameObject.GetComponent<Ammo>().owner != name
+            Debug.Log("bullet hit");
             health.ChangeHealth(-10);
 
             // if (isTurn){
@@ -71,6 +87,8 @@ public class PlayerController : MonoBehaviour
             // }
         }
     }
+
+    
 }
 
 //code from Youtube and Robbie: https://www.youtube.com/watch?v=PpGJLOolp3Q&ab_channel=AwesomeTuts-AnyoneCanLearnToMakeGames
